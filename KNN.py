@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import pandas as pd
+import time
 
 # Load the dataset
 dataset_path = 'chest_xray'
@@ -28,6 +29,9 @@ def preprocess_data(data_path, img_size=(150, 150)):
             labels.append(0 if label == 'NORMAL' else 1)
     return np.array(images), np.array(labels)
 
+# Start the preprocessing timer
+preprocess_start_time = time.time()
+
 train_images, train_labels = preprocess_data(train_path)
 val_images, val_labels = preprocess_data(val_path)
 test_images, test_labels = preprocess_data(test_path)
@@ -36,9 +40,18 @@ train_images = train_images.reshape(-1, 150 * 150)
 val_images = val_images.reshape(-1, 150 * 150)
 test_images = test_images.reshape(-1, 150 * 150)
 
+# Stop the preprocessing timer
+preprocess_end_time = time.time()
+
+# Start the training timer
+train_start_time = time.time()
+
 # Train the KNN classifier
 knn_classifier = KNeighborsClassifier(n_neighbors=5)
 knn_classifier.fit(train_images, train_labels)
+
+# Stop the training timer
+train_end_time = time.time()
 
 # Evaluate the model
 train_preds = knn_classifier.predict(train_images)
@@ -58,6 +71,14 @@ print("Test Set Evaluation:")
 print(classification_report(test_labels, test_preds, zero_division=1))
 print(confusion_matrix(test_labels, test_preds))
 print("Test Accuracy:", accuracy_score(test_labels, test_preds))
+
+# Calculate the execution times
+preprocess_time = round(preprocess_end_time - preprocess_start_time, 2)
+train_time = round(train_end_time - train_start_time, 2)
+total_time = round(preprocess_time + train_time, 2)
+print("Preprocessing Time:", preprocess_time, "seconds")
+print("Training Time:", train_time, "seconds")
+print("Total Time:", total_time, "seconds")
 
 # Create a DataFrame to store the results
 results = pd.DataFrame(columns=['Set', 'Accuracy'])

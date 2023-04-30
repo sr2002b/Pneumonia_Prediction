@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import pandas as pd
+import time
 
 # Load the dataset
 dataset_path = 'chest_xray'
@@ -36,9 +37,15 @@ train_images = train_images.reshape(-1, 150 * 150)
 val_images = val_images.reshape(-1, 150 * 150)
 test_images = test_images.reshape(-1, 150 * 150)
 
+# Start the timer
+start_time = time.time()
+
 # Train the Decision Tree classifier
 dt_classifier = DecisionTreeClassifier()
 dt_classifier.fit(train_images, train_labels)
+
+# Stop the timer
+end_time = time.time()
 
 # Evaluate the model
 train_preds = dt_classifier.predict(train_images)
@@ -58,6 +65,10 @@ print("Test Set Evaluation:")
 print(classification_report(test_labels, test_preds, zero_division=1))
 print(confusion_matrix(test_labels, test_preds))
 print("Test Accuracy:", accuracy_score(test_labels, test_preds))
+
+# Calculate the execution time
+execution_time = round(end_time - start_time, 2)
+print("Execution Time:", execution_time, "seconds")
 
 # Create a DataFrame to store the results
 results = pd.DataFrame(columns=['Set', 'Accuracy'])
