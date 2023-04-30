@@ -14,6 +14,7 @@ train_path = os.path.join(dataset_path, 'train')
 val_path = os.path.join(dataset_path, 'val')
 test_path = os.path.join(dataset_path, 'test')
 
+
 # Preprocess the data
 def preprocess_data(data_path, img_size=(150, 150)):
     images = []
@@ -28,6 +29,7 @@ def preprocess_data(data_path, img_size=(150, 150)):
             images.append(img)
             labels.append(0 if label == 'NORMAL' else 1)
     return np.array(images), np.array(labels)
+
 
 train_images, train_labels = preprocess_data(train_path)
 val_images, val_labels = preprocess_data(val_path)
