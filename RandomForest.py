@@ -1,3 +1,4 @@
+# created using chatgpt-4 per assignment instructions
 import os
 import numpy as np
 from PIL import Image
